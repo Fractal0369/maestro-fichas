@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sua Ficha — Maestro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0b; --bg2: #111114;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8e6e0; --muted: rgba(232,230,224,0.5);
+    --accent: #c9a96e; --accent2: #7c6e5a;
+    --locked: rgba(255,255,255,0.04);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Cormorant Garamond',Georgia,serif; min-height:100vh; overflow-x:hidden; }
+  body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events:none; z-index:999; }
+  .container { max-width:700px; margin:0 auto; padding:0 28px 140px; }
+  .act-marker { display:flex; align-items:center; gap:16px; padding:56px 0 0; margin-bottom:48px; }
+  .act-number { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.4em; color:var(--accent); text-transform:uppercase; white-space:nowrap; }
+  .act-line { flex:1; height:1px; background:linear-gradient(90deg,var(--accent2),transparent); }
+  .act-title { font-size:11px; font-family:'DM Mono',monospace; letter-spacing:0.25em; color:var(--muted); text-transform:uppercase; white-space:nowrap; }
+  .header { padding:88px 0 64px; border-bottom:1px solid var(--border); }
+  .maestro-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.4em; color:var(--accent2); text-transform:uppercase; margin-bottom:36px; }
+  .user-name { font-size:clamp(44px,9vw,76px); font-weight:300; line-height:1.0; letter-spacing:-0.025em; margin-bottom:28px; }
+  .user-name em { font-style:italic; color:var(--accent); }
+  .header-intro { font-size:19px; font-weight:300; line-height:1.75; color:var(--muted); max-width:540px; margin-bottom:20px; }
+  .header-intro strong { color:var(--text); font-weight:400; }
+  .codinome-badge { display:inline-flex; align-items:center; gap:12px; border:1px solid rgba(201,169,110,0.25); padding:12px 20px; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.15em; color:var(--accent); text-transform:uppercase; margin-top:12px; }
+  .section { margin-bottom:64px; }
+  .section-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.35em; color:var(--accent2); text-transform:uppercase; margin-bottom:20px; }
+  .impact-text { font-size:clamp(24px,4vw,32px); font-weight:300; line-height:1.3; margin-bottom:20px; }
+  .impact-text em { font-style:italic; color:var(--accent); }
+  .section-body { font-size:17px; font-weight:300; line-height:1.8; color:var(--muted); }
+  .section-body strong { color:var(--text); font-weight:400; }
+  .energia-card { background:var(--bg2); border:1px solid var(--border); padding:32px; }
+  .energia-top { display:flex; align-items:flex-start; gap:20px; margin-bottom:24px; }
+  .energia-symbol { font-size:36px; color:var(--accent); line-height:1; margin-top:4px; }
+  .energia-name { font-size:28px; font-weight:300; margin-bottom:4px; }
+  .energia-subtitle { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.3em; color:var(--muted); text-transform:uppercase; }
+  .energia-desc { font-size:17px; font-weight:300; line-height:1.8; color:var(--muted); margin-bottom:16px; }
+  .energia-desc strong { color:var(--text); font-weight:400; }
+  .energia-implication { font-size:15px; font-style:italic; color:rgba(232,230,224,0.35); border-top:1px solid var(--border); padding-top:20px; margin-top:8px; line-height:1.7; }
+  .radar-wrap { display:grid; grid-template-columns:1fr 1fr; gap:32px; align-items:start; }
+  @media(max-width:580px){ .radar-wrap{grid-template-columns:1fr;} }
+  .radar-svg { width:100%; height:auto; display:block; }
+  .radar-legend { display:flex; flex-direction:column; gap:10px; }
+  .legend-item { display:flex; flex-direction:column; gap:4px; }
+  .legend-row { display:flex; justify-content:space-between; align-items:baseline; }
+  .legend-name { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.1em; color:var(--muted); text-transform:uppercase; }
+  .legend-name.top { color:var(--text); }
+  .legend-val { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); }
+  .legend-val.top { color:var(--accent); }
+  .legend-bar-wrap { height:2px; background:rgba(255,255,255,0.06); width:100%; }
+  .legend-bar { height:100%; background:rgba(201,169,110,0.25); transition:width 1s ease; }
+  .legend-bar.top { background:var(--accent); }
+  .legend-note { font-size:13px; color:rgba(232,230,224,0.4); font-style:italic; line-height:1.5; }
+  .fe-grid { display:flex; flex-direction:column; gap:20px; }
+  .fe-item { padding-bottom:20px; border-bottom:1px solid var(--border); }
+  .fe-item:last-child { border-bottom:none; }
+  .fe-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
+  .fe-name { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.15em; color:var(--muted); text-transform:uppercase; }
+  .fe-name.dominant { color:var(--text); }
+  .fe-val { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); }
+  .fe-val.dominant { color:var(--accent); }
+  .fe-bar-track { height:2px; background:rgba(255,255,255,0.06); margin-bottom:12px; }
+  .fe-bar-fill { height:100%; background:rgba(201,169,110,0.25); transition:width 1s ease; }
+  .fe-bar-fill.dominant { background:var(--accent); }
+  .fe-desc { font-size:15px; font-weight:300; line-height:1.7; color:var(--muted); }
+  .estilo-block { background:var(--bg2); border:1px solid var(--border); padding:32px; }
+  .estilo-text { font-size:20px; font-style:italic; font-weight:300; color:var(--accent); margin-bottom:24px; line-height:1.5; }
+  .estilo-body { font-size:17px; font-weight:300; line-height:1.8; color:var(--muted); }
+  .estilo-body strong { color:var(--text); font-weight:400; }
+  .insights-grid { display:flex; flex-direction:column; gap:16px; }
+  .insight-card { background:var(--bg2); border:1px solid var(--border); padding:28px 32px; }
+  .insight-type { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.3em; color:var(--accent2); text-transform:uppercase; margin-bottom:12px; }
+  .insight-headline { font-size:20px; font-weight:400; margin-bottom:14px; line-height:1.3; }
+  .insight-text { font-size:16px; font-weight:300; line-height:1.75; color:var(--muted); }
+  .insight-text strong { color:var(--text); font-weight:400; }
+  .riasec-intro { font-size:19px; font-weight:300; line-height:1.7; margin-bottom:24px; }
+  .riasec-intro strong { color:var(--accent); font-weight:400; }
+  .riasec-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px; }
+  @media(max-width:480px){ .riasec-grid{grid-template-columns:1fr;} }
+  .riasec-card { background:var(--bg2); border:1px solid var(--border); padding:20px; }
+  .riasec-card.highlight { border-color:rgba(201,169,110,0.3); }
+  .riasec-type { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.3em; color:var(--muted); text-transform:uppercase; margin-bottom:8px; }
+  .riasec-name { font-size:18px; font-weight:400; margin-bottom:8px; color:var(--text); }
+  .riasec-card.highlight .riasec-name { color:var(--accent); }
+  .riasec-desc { font-size:14px; font-weight:300; line-height:1.6; color:var(--muted); }
+  .riasec-body { font-size:16px; font-weight:300; line-height:1.8; color:var(--muted); }
+  .riasec-body strong { color:var(--text); font-weight:400; }
+  .tension-block { border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:48px 0; margin-bottom:64px; }
+  .tension-title { font-size:24px; font-weight:300; margin-bottom:24px; line-height:1.4; }
+  .tension-body { font-size:17px; font-weight:300; line-height:1.8; color:var(--muted); margin-bottom:16px; }
+  .tension-body strong { color:var(--text); font-weight:400; }
+  .misterio-block { text-align:center; padding:64px 0; }
+  .misterio-symbol { display:block; font-size:32px; color:var(--accent); margin-bottom:24px; opacity:0.6; }
+  .misterio-title { font-size:22px; font-weight:300; margin-bottom:20px; }
+  .misterio-text { font-size:17px; font-weight:300; line-height:1.8; color:var(--muted); max-width:500px; margin:0 auto 12px; }
+  .locked-section { margin-bottom:80px; }
+  .locked-intro { font-size:17px; font-weight:300; line-height:1.8; color:var(--muted); margin-bottom:32px; }
+  .locked-intro strong { color:var(--text); font-weight:400; }
+  .locked-cards { display:flex; flex-direction:column; gap:1px; background:var(--border); border:1px solid var(--border); }
+  .locked-card { background:var(--bg); padding:28px 32px; display:flex; justify-content:space-between; align-items:flex-start; gap:24px; }
+  .locked-card-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.3em; color:var(--accent2); text-transform:uppercase; margin-bottom:8px; }
+  .locked-card-title { font-size:18px; font-weight:400; margin-bottom:8px; }
+  .locked-card-question { font-size:14px; font-style:italic; color:var(--muted); margin-bottom:12px; line-height:1.6; }
+  .locked-card-desc { font-size:14px; font-weight:300; line-height:1.7; color:rgba(232,230,224,0.35); }
+  .lock-badge { display:flex; flex-direction:column; align-items:center; gap:6px; flex-shrink:0; }
+  .lock-badge svg { width:18px; height:18px; color:rgba(255,255,255,0.15); }
+  .lock-badge-text { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.2em; color:rgba(255,255,255,0.15); text-transform:uppercase; white-space:nowrap; }
+  .cta-narrative { font-size:18px; font-weight:300; line-height:1.85; color:var(--muted); margin-bottom:48px; }
+  .cta-narrative em { font-style:italic; color:var(--text); }
+  .cta-narrative p { margin-bottom:20px; }
+  .cta-narrative strong { color:var(--text); font-weight:400; }
+  .cta-block { background:var(--bg2); border:1px solid var(--border); padding:48px; text-align:center; }
+  .cta-pretitle { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.4em; color:var(--accent2); text-transform:uppercase; margin-bottom:20px; }
+  .cta-title { font-size:clamp(28px,5vw,40px); font-weight:300; line-height:1.2; margin-bottom:20px; }
+  .cta-title em { font-style:italic; color:var(--accent); }
+  .cta-sub { font-size:17px; font-weight:300; line-height:1.7; color:var(--muted); max-width:440px; margin:0 auto 32px; }
+  .cta-sub strong { color:var(--text); font-weight:400; }
+  .cta-btn { display:inline-block; background:transparent; border:1px solid var(--accent); color:var(--accent); font-family:'DM Mono',monospace; font-size:10px; letter-spacing:0.25em; text-transform:uppercase; padding:16px 36px; text-decoration:none; transition:all 0.2s; }
+  .cta-btn:hover { background:var(--accent); color:var(--bg); }
+  .cta-footnote { font-size:13px; color:rgba(232,230,224,0.2); margin-top:20px; font-family:'DM Mono',monospace; letter-spacing:0.1em; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="maestro-label">Maestro · Ficha de Despertar · Parcial</div>
+    <h1 class="user-name">Olá, <em>Viajante</em></h1>
+    <p class="header-intro">O que você está prestes a ler não é um teste. É um <strong>mapeamento do seu funcionamento real</strong> — a forma como você processa o mundo, toma decisões, aprende e age. Construído a partir das suas próprias respostas.</p>
+    <p class="header-intro">Algumas pessoas reconhecem isso imediatamente. Outras demoram alguns minutos. De qualquer forma, o que está aqui <strong>sempre esteve presente em você</strong>.</p>
+    <div class="codinome-badge">Explorador Equilibrado</div>
+  </div>
+
+  <div class="act-marker">
+    <span class="act-number">I</span>
+    <div class="act-line"></div>
+    <span class="act-title">O que você é</span>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Energia Cognitiva</div>
+    <div class="energia-card">
+      <div class="energia-top">
+        <div class="energia-symbol">🜁</div>
+        <div>
+          <div class="energia-name">Ar</div>
+          <div class="energia-subtitle">Elemento arquétipo · Dominante</div>
+        </div>
+      </div>
+      <p class="energia-desc">Sua mente opera pela <strong>lógica, estrutura e análise</strong>. Antes de agir, você constrói o mapa. Antes de decidir, você identifica o padrão. Enquanto outros reagem ao que veem, você já está processando o que está por baixo.</p>
+      <div class="energia-implication">Pessoas com energia Ar costumam ser subestimadas no início — porque pensam antes de falar. E temidas depois — porque quando falam, geralmente estão certos.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Afinidades Cognitivas</div>
+    <div class="impact-text">Suas 9 inteligências — <em>e o que elas dizem sobre como você funciona</em></div>
+    <p class="section-body" style="margin-bottom:32px;">Inteligência não é uma coisa só. Você tem nove delas, cada uma com intensidade diferente. As mais altas são onde seu cérebro gasta energia naturalmente — sem esforço, sem forçar. As mais baixas não são fraquezas: são simplesmente onde você não foi moldado para operar.</p>
+    <div class="radar-wrap">
+      <svg class="radar-svg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+    <defs><style>
+      .rg{fill:none;stroke:rgba(255,255,255,0.05);stroke-width:1}
+      .ra{stroke:rgba(255,255,255,0.07);stroke-width:1}
+      .rp{fill:rgba(201,169,110,0.1);stroke:rgba(201,169,110,0.55);stroke-width:1.5;stroke-linejoin:round}
+      .rl{fill:rgba(232,230,224,0.35);font-family:'DM Mono',monospace;font-size:7.5px}
+    </style></defs>
+    <g transform="translate(0,0)">
+      <circle class="rg" cx="150" cy="150" r="110"/>
+      <circle class="rg" cx="150" cy="150" r="82.5"/>
+      <circle class="rg" cx="150" cy="150" r="55"/>
+      <circle class="rg" cx="150" cy="150" r="27.5"/>
+      <line class="ra" x1="150" y1="150" x2="150.00" y2="40.00"/><line class="ra" x1="150" y1="150" x2="220.71" y2="65.74"/><line class="ra" x1="150" y1="150" x2="258.33" y2="130.90"/><line class="ra" x1="150" y1="150" x2="245.26" y2="205.00"/><line class="ra" x1="150" y1="150" x2="187.62" y2="253.37"/><line class="ra" x1="150" y1="150" x2="112.38" y2="253.37"/><line class="ra" x1="150" y1="150" x2="54.74" y2="205.00"/><line class="ra" x1="150" y1="150" x2="41.67" y2="130.90"/><line class="ra" x1="150" y1="150" x2="79.29" y2="65.74"/>
+      <polygon class="rp" points="150,95 185.35331853275966,107.86755562845622 204.16442641567144,140.44935022831882 197.63139720814414,177.5 168.81110788291178,201.68309414322496 131.18889211708822,201.68309414322496 102.36860279185589,177.50000000000003 95.83557358432856,140.44935022831885 114.64668146724033,107.86755562845622"/>
+      <text class="rl" x="150.0" y="30.0" text-anchor="middle">LINGUÍSTICA</text><text class="rl" x="228.7" y="61.7" text-anchor="start">LÓGICA</text><text class="rl" x="266.3" y="130.9" text-anchor="start">ESPACIAL</text><text class="rl" x="253.3" y="209.0" text-anchor="start">MUSICAL</text><text class="rl" x="191.6" y="265.4" text-anchor="start">CORPORAL</text><text class="rl" x="108.4" y="265.4" text-anchor="end">INTERP.</text><text class="rl" x="46.7" y="209.0" text-anchor="end">INTRAPES.</text><text class="rl" x="33.7" y="130.9" text-anchor="end">NATURALISTA</text><text class="rl" x="71.3" y="61.7" text-anchor="end">EXISTENCIAL</text>
+    </g>
+  </svg>
+      <div class="radar-legend"><div class="legend-item">
+    <div class="legend-row">
+      <span class="legend-name top">Linguística</span>
+      <span class="legend-val top">50</span>
+    </div>
+    <div class="legend-bar-wrap">
+      <div class="legend-bar top" style="width:50%"></div>
+    </div>
+    <div class="legend-note">Você articula o que outros apenas sentem.</div>
+  </div><div class="legend-item">
+    <div class="legend-row">
+      <span class="legend-name top">Lógico-Matemática</span>
+      <span class="legend-val top">50</span>
+    </div>
+    <div class="legend-bar-wrap">
+      <div class="legend-bar top" style="width:50%"></div>
+    </div>
+    <div class="legend-note">Padrões e estruturas são sua linguagem natural.</div>
+  </div><div class="legend-item">
+    <div class="legend-row">
+      <span class="legend-name top">Espacial</span>
+      <span class="legend-val top">50</span>
+    </div>
+    <div class="legend-bar-wrap">
+      <div class="legend-bar top" style="width:50%"></div>
+    </div>
+    <div class="legend-note">Você pensa em imagens e estruturas antes de palavras.</div>
+  </div><div class="legend-item">
+    <div class="legend-row">
+      <span class="legend-name">Musical</span>
+      <span class="legend-val">50</span>
+    </div>
+    <div class="legend-bar-wrap">
+      <div class="legend-bar" style="width:50%"></div>
+    </div>
+    
+  </div><div class="legend-item">
+    <div class="legend-row">
+      <span class="legend-name">Corporal</span>
+      <span class="legend-val">50</span>
+    </div>
+    <div class="legend-bar-wrap">
+      <div class="legend-bar" style="width:50%"></div>
+    </div>
+    
+  </div><div class="legend-item">
+    <div class="legend-row">
+      <span class="legend-name">Interpessoal</span>
+      <span class="legend-val">50</span>
+    </div>
+    <div class="legend-bar-wrap">
+      <div class="legend-bar" style="width:50%"></div>
+    </div>
+    
+  </div><div class="legend-item">
+    <div class="legend-row">
+      <span class="legend-name">Intrapessoal</span>
+      <span class="legend-val">50</span>
+    </div>
+    <div class="legend-bar-wrap">
+      <div class="legend-bar" style="width:50%"></div>
+    </div>
+    
+  </div><div class="legend-item">
+    <div class="legend-row">
+      <span class="legend-name">Naturalista</span>
+      <span class="legend-val">50</span>
+    </div>
+    <div class="legend-bar-wrap">
+      <div class="legend-bar" style="width:50%"></div>
+    </div>
+    
+  </div><div class="legend-item">
+    <div class="legend-row">
+      <span class="legend-name">Existencial</span>
+      <span class="legend-val">50</span>
+    </div>
+    <div class="legend-bar-wrap">
+      <div class="legend-bar" style="width:50%"></div>
+    </div>
+    
+  </div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Funções Executivas</div>
+    <div class="impact-text">Como sua mente <em>realmente</em> opera no dia a dia</div>
+    <p class="section-body" style="margin-bottom:28px;">Isso não é sobre personalidade. É sobre <strong>como seu sistema cognitivo processa e executa</strong>. Suas funções dominantes são onde você tem vantagem real. As mais baixas são onde você gasta energia desnecessária tentando ser o que não é.</p>
+    <div class="fe-grid"><div class="fe-item">
+    <div class="fe-row">
+      <span class="fe-name dominant">Foco ◈ dominante</span>
+      <span class="fe-val dominant">50</span>
+    </div>
+    <div class="fe-bar-track"><div class="fe-bar-fill dominant" style="width:50%"></div></div>
+    <div class="fe-desc">Quando algo merece sua atenção, você entra nele completamente. O desafio é aprender a filtrar o que realmente merece.</div>
+  </div><div class="fe-item">
+    <div class="fe-row">
+      <span class="fe-name dominant">Flexibilidade ◈ dominante</span>
+      <span class="fe-val dominant">50</span>
+    </div>
+    <div class="fe-bar-track"><div class="fe-bar-fill dominant" style="width:50%"></div></div>
+    <div class="fe-desc">Mudança de plano tem um custo para você — não é rigidez, é que seus sistemas internos foram construídos para durar.</div>
+  </div><div class="fe-item">
+    <div class="fe-row">
+      <span class="fe-name">Controle Inibitório</span>
+      <span class="fe-val">50</span>
+    </div>
+    <div class="fe-bar-track"><div class="fe-bar-fill" style="width:50%"></div></div>
+    <div class="fe-desc">Quando algo captura sua paixão, resistir a ele é genuinamente difícil. Pode ser problema ou força — depende do que te captura.</div>
+  </div><div class="fe-item">
+    <div class="fe-row">
+      <span class="fe-name">Velocidade de Processamento</span>
+      <span class="fe-val">50</span>
+    </div>
+    <div class="fe-bar-track"><div class="fe-bar-fill" style="width:50%"></div></div>
+    <div class="fe-desc">Você processa rápido quando o terreno é familiar. Em território novo, precisa de tempo — e esse tempo costuma valer a pena.</div>
+  </div><div class="fe-item">
+    <div class="fe-row">
+      <span class="fe-name">Planejamento</span>
+      <span class="fe-val">50</span>
+    </div>
+    <div class="fe-bar-track"><div class="fe-bar-fill" style="width:50%"></div></div>
+    <div class="fe-desc">Você não entra em território novo sem mapa. Isso não é hesitação — é estratégia. Você adianta problemas que outros nem percebem.</div>
+  </div><div class="fe-item">
+    <div class="fe-row">
+      <span class="fe-name">Disciplina</span>
+      <span class="fe-val">50</span>
+    </div>
+    <div class="fe-bar-track"><div class="fe-bar-fill" style="width:50%"></div></div>
+    <div class="fe-desc">Você cumpre o que importa. Mas quando não encontra sentido em algo, a disciplina cai — o que é um sinal, não uma falha.</div>
+  </div></div>
+  </div>
+
+  <div class="act-marker">
+    <span class="act-number">II</span>
+    <div class="act-line"></div>
+    <span class="act-title">O que falta nomear</span>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Estilo de Pensamento</div>
+    <div class="estilo-block">
+      <div class="estilo-text">"Processa o mundo através de uma lente panorâmica, captando padrões em múltiplas dimensões antes de focar."</div>
+      <div class="estilo-body">Seu Foco atua como uma lente ajustável, permitindo mergulhos profundos quando algo genuinamente captura sua atenção. <br><br>O custo disso é que <strong>A Disciplina/Constância ainda busca seu ritmo próprio, oscilando entre períodos de intensa dedicação e dispersão natural.</strong></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Insights Iniciais</div>
+    <div class="insights-grid"><div class="insight-card">
+    <div class="insight-type">Força evidente</div>
+    <div class="insight-headline">Sua força reside na versatilidade cognitiva</div>
+    <div class="insight-text">uma base sólida para especialização futura em qualquer direção</div>
+  </div><div class="insight-card">
+    <div class="insight-type">Modo de aprendizagem</div>
+    <div class="insight-headline">Aprende melhor através da experimentação ativa, testando teo...</div>
+    <div class="insight-text">Aprende melhor através da experimentação ativa, testando teorias no mundo real</div>
+  </div><div class="insight-card">
+    <div class="insight-type">Potencial emergente</div>
+    <div class="insight-headline">Potencial emergente para tornar-se um sintetizador de conhec...</div>
+    <div class="insight-text">Potencial emergente para tornar-se um sintetizador de conhecimentos aparentemente desconexos</div>
+  </div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Áreas de Expressão Natural</div>
+    <p class="riasec-intro">Sua expressão se manifesta na união entre <strong>Realista</strong> e <strong>Investigativo</strong> — Gravita naturalmente para campos que combinam exploração prática com descoberta sistemática do conhecimento..</p>
+    <div class="riasec-grid"><div class="riasec-card highlight">
+    <div class="riasec-type">Dominante</div>
+    <div class="riasec-name">Realista</div>
+    <div class="riasec-desc">Trabalhar com objetos, ferramentas e ambientes concretos. Você produz coisas tangíveis.</div>
+  </div><div class="riasec-card highlight">
+    <div class="riasec-type">Secundário</div>
+    <div class="riasec-name">Investigativo</div>
+    <div class="riasec-desc">Pesquisar, analisar, entender como as coisas realmente funcionam. Você não aceita a superfície.</div>
+  </div><div class="riasec-card">
+    <div class="riasec-type">Presente</div>
+    <div class="riasec-name">Artístico</div>
+    <div class="riasec-desc">Criar com liberdade, expressar perspectivas únicas, fugir do óbvio.</div>
+  </div><div class="riasec-card">
+    <div class="riasec-type">Latente</div>
+    <div class="riasec-name">Social</div>
+    <div class="riasec-desc">Ajudar, ensinar, desenvolver pessoas. Seu impacto passa pelo outro.</div>
+  </div></div>
+    <p class="riasec-body">O que isso significa na prática: você funciona melhor em ambientes onde <strong>pode investigar fundo e depois construir algo com o que encontrou</strong>. Ambientes que exigem só execução te sufocam. Ambientes que permitem só análise te frustram. Você precisa dos dois.</p>
+  </div>
+
+  <div class="tension-block">
+    <div class="tension-title">Mas existe algo que esta ficha não consegue responder ainda.</div>
+    <p class="tension-body">Você sabe <strong>como pensa</strong>. Mas ainda não sabe <strong>onde isso se encaixa</strong>. Existe uma Guilda — um grupo cognitivo ao qual você já pertence, não por escolha, mas por funcionamento. Existe uma Classe — o papel específico que suas forças constroem quando você está no ambiente certo. E existem pontos cegos que operam no escuro agora, que têm nome, e que nomeados passam a ser gerenciáveis.</p>
+    <p class="tension-body">E a pergunta que fica: <strong>dado tudo isso, onde você se encaixa profissionalmente?</strong> Quais cinco caminhos realmente fazem sentido para quem você é — não para quem você acha que deveria ser?</p>
+  </div>
+
+  <div class="misterio-block">
+    <span class="misterio-symbol">⬡</span>
+    <div class="misterio-title">Algo que ainda não tem nome</div>
+    <p class="misterio-text">Nas brumas do amanhecer, onde todos os caminhos ainda se entrelaçam, uma ordem antiga observa aqueles que carregam o dom da visão panorâmica. Eles são os cartógrafos do possível, destinados a mapear territórios que outros nem sonham existir. Seu símbolo: uma rosa dos ventos que aponta para todas as direções simultaneamente.</p>
+    <p class="misterio-text" style="font-size:16px;margin-top:12px;color:rgba(232,230,224,0.3);">A pergunta não é se você pertence a ela.<br>É quando você estará pronto para ser nomeado.</p>
+  </div>
+
+  <div class="locked-section">
+    <div class="section-label">O que a Ficha Completa revela</div>
+    <p class="locked-intro">A análise parcial mostrou <strong>como você pensa</strong>. A ficha completa responde o que vem depois: <strong>quem você é dentro de um sistema maior, e onde especificamente isso te leva.</strong></p>
+    <div class="locked-cards">
+      <div class="locked-card"><div><div class="locked-card-label">Guilda</div><div class="locked-card-title">Você pertence a algum lugar</div><div class="locked-card-question">"Por que me identifico tanto com certos tipos de pessoas — e me sinto completamente fora de lugar com outros?"</div><div class="locked-card-desc">Sua Guilda é o grupo cognitivo ao qual você naturalmente pertence. Não por escolha — por funcionamento. Quando você descobre qual é a sua, muita coisa passa a fazer sentido.</div></div><div class="lock-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="lock-badge-text">Bloqueado</span></div></div>
+      <div class="locked-card"><div><div class="locked-card-label">Classe</div><div class="locked-card-title">O papel que você foi feito para exercer</div><div class="locked-card-question">"Qual é o meu papel natural em um grupo? Onde eu tenho impacto real?"</div><div class="locked-card-desc">Dentro da sua Guilda, sua Classe define o papel específico que suas forças constroem quando você está no ambiente certo.</div></div><div class="lock-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="lock-badge-text">Bloqueado</span></div></div>
+      <div class="locked-card"><div><div class="locked-card-label">Talentos</div><div class="locked-card-title">O que você faz bem sem perceber</div><div class="locked-card-question">"O que eu faço naturalmente bem — e que as pessoas ao meu redor percebem antes de mim?"</div><div class="locked-card-desc">Talentos não são habilidades que você treinou. São capacidades que emergem do cruzamento do que você é.</div></div><div class="lock-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="lock-badge-text">Bloqueado</span></div></div>
+      <div class="locked-card"><div><div class="locked-card-label">Pontos Cegos</div><div class="locked-card-title">O que te trava sem que você perceba</div><div class="locked-card-question">"Por que certas situações me esgotam tanto? Por que repito os mesmos padrões?"</div><div class="locked-card-desc">Pontos cegos não são defeitos de caráter. São padrões cognitivos que surgem naturalmente do que você é — e que, sem nome, continuam operando no escuro.</div></div><div class="lock-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="lock-badge-text">Bloqueado</span></div></div>
+      <div class="locked-card"><div><div class="locked-card-label">5 Carreiras</div><div class="locked-card-title">Onde tudo isso se encaixa profissionalmente</div><div class="locked-card-question">"Quais caminhos profissionais realmente fazem sentido para quem eu sou?"</div><div class="locked-card-desc">Não uma lista genérica. Cinco caminhos selecionados a partir do cruzamento das suas inteligências, funções executivas, motivações e interesses.</div></div><div class="lock-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="lock-badge-text">Bloqueado</span></div></div>
+      <div class="locked-card"><div><div class="locked-card-label">Missão</div><div class="locked-card-title">O que você tem a oferecer ao mundo</div><div class="locked-card-question">"O que, especificamente, eu tenho para contribuir?"</div><div class="locked-card-desc">Sua missão inicial é uma síntese do que você é, do que o mundo precisa e do que você pode realisticamente construir.</div></div><div class="lock-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="lock-badge-text">Bloqueado</span></div></div>
+    </div>
+  </div>
+
+  <div class="act-marker">
+    <span class="act-number">III</span>
+    <div class="act-line"></div>
+    <span class="act-title">O que vem depois</span>
+  </div>
+
+  <div class="cta-narrative">
+    <p>Autoconhecimento sem direção é apenas curiosidade. O que torna isso útil é quando você consegue responder uma pergunta concreta: <em>dado quem eu sou, onde eu me encaixo?</em></p>
+    <p>A Ficha Completa foi construída para responder exatamente isso — com precisão, não com generalidade. Ela não diz "você é criativo, então talvez goste de arte". Ela identifica o cruzamento específico entre o que você é e onde isso gera valor real no mundo.</p>
+    <p>E existe algo além disso que vale saber: <strong>o diagnóstico é apenas o começo</strong>. Saber quem você é abre a primeira porta. O que vem depois — capacitação, desenvolvimento, inserção no lugar certo — é a jornada que esse mapa torna possível.</p>
+  </div>
+
+  <div class="cta-block">
+    <div class="cta-pretitle">Próxima etapa</div>
+    <h2 class="cta-title">Pronto para descobrir<br><em>onde você realmente se encaixa?</em></h2>
+    <p class="cta-sub">Guilda, Classe, Talentos, Pontos Cegos, <strong>5 Carreiras específicas para o seu perfil</strong> e sua Missão inicial. Tudo construído a partir do que você respondeu.</p>
+    <a href="LINK_PAGAMENTO" class="cta-btn">Desbloquear Identidade Completa</a>
+    <div class="cta-footnote">Esta ficha parcial ficará salva. Você pode voltar quando quiser.</div>
+  </div>
+
+</div>
+<script>
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.legend-bar, .fe-bar-fill').forEach(bar => {
+      const w = bar.style.width;
+      bar.style.width = '0%';
+      requestAnimationFrame(() => setTimeout(() => { bar.style.width = w; }, 200));
+    });
+  });
+</script>
+</body>
+</html>
