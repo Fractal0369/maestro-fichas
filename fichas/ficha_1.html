@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Mapa de Atributos · Daniel Teste</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=IM+Fell+English:ital@0;1&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0a0c14; --bg2:#0d1020; --card:#0f1118;
+  --border:rgba(79,195,247,0.12); --borderf:rgba(79,195,247,0.25);
+  --creme:#e8eaf6; --creme2:#b0bec5; --muted:rgba(232,234,246,0.55);
+  --faint:rgba(232,234,246,0.28); --faint2:rgba(232,234,246,0.12);
+  --acento:#4fc3f7; --acento2:#81d4fa; --base:#1a1a3e;
+  --fogo:#4fc3f7; --ouro:#81d4fa; --azul:#4fc3f7; --verm:#7986cb; --roxo:#9575cd; --verde:#4dd0e1;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--creme);font-family:'Space Grotesk',sans-serif;font-size:15px;line-height:1.7;max-width:430px;margin:0 auto;overflow-x:hidden;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.fu{opacity:0;animation:fadeUp 0.75s ease forwards;}
+.d1{animation-delay:.05s;}.d2{animation-delay:.15s;}.d3{animation-delay:.25s;}.d4{animation-delay:.35s;}
+.div{text-align:center;padding:4px 0 20px;color:var(--borderf);font-size:11px;letter-spacing:.6em;}
+.hdr{padding:36px 24px 0;}
+.hdr-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(79,195,247,.06);border:.5px solid rgba(79,195,247,.2);border-radius:20px;padding:4px 12px;margin-bottom:20px;}
+.hdr-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--ouro);}
+.hdr-badge-txt{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;text-transform:uppercase;color:var(--acento);}
+.hdr-nome{font-family:'Cinzel',serif;font-size:32px;font-weight:700;letter-spacing:.04em;color:var(--creme);line-height:1.05;margin-bottom:5px;}
+.hdr-codinome{font-family:'IM Fell English',serif;font-size:15px;color:rgba(201,160,48,.7);margin-bottom:24px;}
+.hdr-linha{height:.5px;background:linear-gradient(90deg,var(--borderf),transparent);margin-bottom:28px;}
+.hdr-meta{display:flex;gap:20px;margin-bottom:28px;}
+.hdr-meta-item{display:flex;flex-direction:column;gap:2px;}
+.hdr-meta-label{font-family:'Cinzel',serif;font-size:6px;letter-spacing:.4em;text-transform:uppercase;color:var(--faint);}
+.hdr-meta-val{font-family:'Cinzel',serif;font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--creme2);text-transform:uppercase;}
+.teia-wrap{padding:0 24px 28px;display:flex;flex-direction:column;align-items:center;}
+.sec-label{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.45em;text-transform:uppercase;color:var(--faint);margin-bottom:16px;align-self:flex-start;}
+.teia-svg{width:100%;max-width:360px;}
+.teia-leg{display:flex;gap:18px;margin-top:12px;flex-wrap:wrap;justify-content:center;}
+.tl-item{display:flex;align-items:center;gap:6px;font-family:'Cinzel',serif;font-size:7px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);}
+.tl-dot{width:7px;height:7px;border-radius:50%;}
+.guilda-card{margin:0 24px 28px;border:.5px solid rgba(79,195,247,.3);border-radius:18px;padding:28px 22px;background:linear-gradient(145deg,#0d1020 0%,#111830 60%,#0a0c14 100%);text-align:center;position:relative;overflow:hidden;}
+.guilda-card::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:200px;height:160px;background:radial-gradient(ellipse,rgba(79,195,247,.12) 0%,transparent 70%);pointer-events:none;}
+.guilda-sym{font-size:44px;display:block;margin-bottom:14px;filter:drop-shadow(0 0 16px rgba(79,195,247,.5));}
+.guilda-subtag{font-family:'Cinzel',serif;font-size:6px;letter-spacing:.55em;text-transform:uppercase;color:var(--faint);margin-bottom:8px;}
+.guilda-nome{font-family:'Cinzel',serif;font-size:20px;font-weight:700;letter-spacing:.08em;color:var(--acento);margin-bottom:4px;}
+.guilda-classe-tag{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:rgba(201,160,48,.5);margin-bottom:18px;}
+.guilda-linha{height:.5px;background:var(--borderf);margin-bottom:18px;}
+.guilda-desc{font-family:'IM Fell English',serif;font-size:15px;color:var(--muted);line-height:1.85;}
+.classe-card{margin:0 24px 28px;background:var(--card);border:.5px solid rgba(79,195,247,.18);border-radius:14px;padding:22px 20px;}
+.classe-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.classe-icon{font-size:22px;}
+.classe-tag{font-family:'Cinzel',serif;font-size:6px;letter-spacing:.45em;text-transform:uppercase;color:var(--faint);margin-bottom:3px;}
+.classe-nome{font-family:'Cinzel',serif;font-size:16px;font-weight:700;letter-spacing:.06em;color:var(--acento);}
+.classe-linha{height:.5px;background:var(--borderf);margin-bottom:16px;}
+.classe-txt{font-size:14px;color:var(--muted);line-height:1.8;}
+.classe-txt strong{color:var(--creme);font-weight:500;}
+.classe-txt em{color:var(--fogo);font-style:normal;}
+.secao{padding:0 24px 28px;}
+.sec-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.sec-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.sec-titulo{font-family:'Cinzel',serif;font-size:15px;font-weight:600;color:var(--creme);letter-spacing:.04em;}
+.sec-sub{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;text-transform:uppercase;margin-bottom:2px;}
+.card{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;position:relative;overflow:hidden;}
+.card-topo{height:1px;position:absolute;top:0;left:0;right:0;}
+.card-tit{font-family:'Cinzel',serif;font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;margin-bottom:8px;}
+.card-txt{font-size:14px;color:var(--muted);line-height:1.75;}
+.card-txt strong{color:var(--creme);font-weight:500;}
+.card-txt em{color:var(--ouro);font-style:normal;}
+.barra{margin-bottom:13px;}
+.barra-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
+.barra-nome{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--creme2);}
+.barra-grad{font-family:'Cinzel',serif;font-size:8px;color:var(--faint);}
+.barra-track{height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;}
+.barra-fill{height:100%;border-radius:2px;}
+.rings-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.ring-card{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:16px 12px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.ring-svg{width:72px;height:72px;}
+.ring-tit{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--creme2);text-align:center;}
+.ring-sub{font-size:11px;color:var(--faint);text-align:center;line-height:1.35;}
+.insight{background:var(--card);border:.5px solid var(--border);border-radius:12px;padding:18px 16px;margin-bottom:10px;display:flex;gap:14px;}
+.insight-num{font-family:'Cinzel',serif;font-size:11px;color:var(--faint2);min-width:18px;padding-top:2px;}
+.insight-tit{font-family:'Cinzel',serif;font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--creme);margin-bottom:6px;}
+.insight-txt{font-size:13px;color:var(--muted);line-height:1.7;}
+.narrativa{font-family:'IM Fell English',serif;font-size:16px;line-height:1.95;color:var(--muted);}
+.narrativa strong{color:var(--creme);font-weight:400;}
+.narrativa em{color:var(--ouro);font-style:normal;}
+.narrativa-corte{margin-top:20px;padding:18px 16px;text-align:center;background:rgba(79,195,247,.04);border:.5px solid rgba(79,195,247,.2);border-radius:10px;}
+.narrativa-corte-txt{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.28em;text-transform:uppercase;color:var(--faint);line-height:1.8;}
+.modal-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:.5px solid var(--border);}
+.modal-item:last-child{border-bottom:none;}
+.modal-icon{font-size:16px;width:24px;text-align:center;flex-shrink:0;margin-top:1px;}
+.modal-tit{font-family:'Cinzel',serif;font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--creme2);margin-bottom:3px;}
+.modal-txt{font-size:13px;color:var(--muted);line-height:1.65;}
+.carreira{background:var(--card);border:.5px solid var(--border);border-radius:13px;padding:18px 16px;margin-bottom:10px;}
+.carr-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.carr-num{font-family:'Cinzel',serif;font-size:26px;font-weight:700;color:var(--borderf);line-height:1;}
+.carr-pct{font-family:'Cinzel',serif;font-size:12px;font-weight:600;color:var(--fogo);}
+.carr-nome{font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--creme);margin-bottom:8px;}
+.carr-por-que{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px;}
+.carr-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.carr-tag{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.15em;text-transform:uppercase;padding:3px 9px;border-radius:20px;background:rgba(255,255,255,.04);border:.5px solid var(--border);color:var(--creme2);}
+.carr-passo{background:rgba(79,195,247,.06);border-left:2px solid var(--acento);border-radius:0 7px 7px 0;padding:9px 12px;}
+.carr-passo-label{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:var(--acento);margin-bottom:3px;}
+.carr-passo-txt{font-size:12px;color:var(--creme2);line-height:1.55;}
+.cego{background:var(--card);border-left:2px solid var(--verm);border-radius:0 12px 12px 0;padding:14px 16px;margin-bottom:10px;}
+.cego-nome{font-family:'Cinzel',serif;font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--verm);margin-bottom:6px;}
+.cego-txt{font-size:13px;color:var(--muted);line-height:1.7;}
+.cego-como{font-size:12px;color:rgba(196,74,58,.6);margin-top:7px;border-top:.5px solid rgba(196,74,58,.12);padding-top:7px;}
+.fecho{padding:32px 24px 60px;text-align:center;}
+.fecho-sym{font-size:32px;color:var(--acento);display:block;margin-bottom:20px;filter:drop-shadow(0 0 12px rgba(201,160,48,.3));}
+.fecho-txt{font-family:'IM Fell English',serif;font-size:17px;color:var(--muted);line-height:1.9;max-width:300px;margin:0 auto 32px;}
+.fecho-data{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;text-transform:uppercase;color:var(--faint);margin-bottom:24px;}
+</style>
+<style>:root{--acento:#00BCD4;}</style>
+</head>
+<body>
+<div class="hdr fu d1"><div class="hdr-badge"><div class="hdr-badge-dot" style="background:var(--acento)"></div><span class="hdr-badge-txt">Mapa Parcial · MaestrIA</span></div><div class="hdr-nome">Daniel Teste</div><div class="hdr-codinome">Tradutor de Realidades</div><div class="hdr-linha"></div><div class="hdr-meta"><div class="hdr-meta-item"><span class="hdr-meta-label">Mapa</span><span class="hdr-meta-val" style="color:var(--acento)">Parcial</span></div><div class="hdr-meta-item"><span class="hdr-meta-label">Status</span><span class="hdr-meta-val">Gratuito</span></div></div></div>
+<div class="secao fu" style="text-align:center;padding:6px 0 2px"><div style="font-family:'IM Fell English',serif;font-style:italic;font-size:16px;line-height:1.65;color:#e8dfc8;max-width:36ch;margin:0 auto">Você constrói pontes entre mundos que outros nem sabem que existem, traduzindo complexidade em clareza com uma precisão que poucos conseguem acompanhar.</div></div>
+<div class="teia-wrap fu d2"><div class="sec-label">Teia de Inteligências Múltiplas</div><svg class="teia-svg" viewBox="0 0 360 340" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="glow2"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    <polygon opacity="0.18" fill="none" stroke="#81d4fa" stroke-width="0.5"
+      points="180.0,140.0 199.3,147.0 209.5,164.8 206.0,185.0 190.3,198.2 169.7,198.2 154.0,185.0 150.5,164.8 160.7,147.0"/>
+    <polygon opacity="0.14" fill="none" stroke="#81d4fa" stroke-width="0.5"
+      points="180.0,110.0 218.6,124.0 239.1,159.6 232.0,200.0 200.5,226.4 159.5,226.4 128.0,200.0 120.9,159.6 141.4,124.0"/>
+    <polygon opacity="0.10" fill="none" stroke="#81d4fa" stroke-width="0.5"
+      points="180.0,80.0 237.9,101.1 268.6,154.4 257.9,215.0 210.8,254.6 149.2,254.6 102.1,215.0 91.4,154.4 122.1,101.1"/>
+    <polygon opacity="0.07" fill="none" stroke="#81d4fa" stroke-width="0.5"
+      points="180.0,50.0 257.1,78.1 298.2,149.2 283.9,230.0 221.0,282.8 139.0,282.8 76.1,230.0 61.8,149.2 102.9,78.1"/>
+    <g opacity="0.10" stroke="#81d4fa" stroke-width="0.5">
+      <line x1="180" y1="170" x2="180.0" y2="50.0"/>
+      <line x1="180" y1="170" x2="257.1" y2="78.1"/>
+      <line x1="180" y1="170" x2="298.2" y2="149.2"/>
+      <line x1="180" y1="170" x2="283.9" y2="230.0"/>
+      <line x1="180" y1="170" x2="221.0" y2="282.8"/>
+      <line x1="180" y1="170" x2="139.0" y2="282.8"/>
+      <line x1="180" y1="170" x2="76.1"  y2="230.0"/>
+      <line x1="180" y1="170" x2="61.8"  y2="149.2"/>
+      <line x1="180" y1="170" x2="102.9" y2="78.1"/>
+    </g>
+    <g font-family="'Cinzel',serif" font-size="8" fill="rgba(232,223,200,0.5)" text-anchor="middle">
+      <text x="180.0" y="22">Existencial</text>
+      <text x="275.0" y="56">Lógica</text>
+      <text x="326.0" y="148">Intrapessoal</text>
+      <text x="308.0" y="248">Linguística</text>
+      <text x="228.0" y="318">Espacial</text>
+      <text x="132.0" y="318">Musical</text>
+      <text x="52.0"  y="248">Interpessoal</text>
+      <text x="34.0"  y="148">Naturalista</text>
+      <text x="90.0"  y="56">Corporal</text>
+    </g>
+    <polygon points="180.0,110.0 218.6,124.0 239.1,159.6 232.0,200.0 200.5,226.4 159.5,226.4 128.0,200.0 120.9,159.6 141.4,124.0" fill="rgba(79,195,247,0.10)" stroke="#4fc3f7" stroke-width="1.8" filter="url(#glow)"/>
+    <g filter="url(#glow2)">
+      <circle cx="180.0" cy="110.0" r="3.5" fill="rgba(79,195,247,0.42)"/>
+      <circle cx="218.6" cy="124.0" r="3.5" fill="rgba(79,195,247,0.42)"/>
+      <circle cx="239.1" cy="159.6" r="3.5" fill="rgba(79,195,247,0.42)"/>
+      <circle cx="232.0" cy="200.0" r="3.5" fill="rgba(79,195,247,0.42)"/>
+      <circle cx="200.5" cy="226.4" r="3.5" fill="rgba(79,195,247,0.42)"/>
+      <circle cx="159.5" cy="226.4" r="3.5" fill="rgba(79,195,247,0.42)"/>
+      <circle cx="128.0" cy="200.0" r="3.5" fill="rgba(79,195,247,0.42)"/>
+      <circle cx="120.9" cy="159.6" r="3.5" fill="rgba(79,195,247,0.42)"/>
+      <circle cx="141.4" cy="124.0" r="3.5" fill="rgba(79,195,247,0.42)"/>
+    </g>
+    <circle cx="180" cy="170" r="3" fill="rgba(79,195,247,0.4)"/>
+  </svg><div class="teia-leg"><div class="tl-item"><div class="tl-dot" style="background:#e8871a"></div>Dominante</div><div class="tl-item"><div class="tl-dot" style="background:rgba(232,135,26,.5)"></div>Marcado</div><div class="tl-item"><div class="tl-dot" style="background:rgba(232,135,26,.25)"></div>Presente</div></div></div>
+<div class="div">· · ·</div>
+<div class="secao fu"><div class="sec-header"><div class="sec-icon" style="background:rgba(74,130,196,.12);color:var(--azul)">◈</div><div><div class="sec-sub" style="color:var(--azul)">Dimensão 1</div><div class="sec-titulo">Inteligências e Canal</div></div></div><div class="barra"><div class="barra-row"><span class="barra-nome">Inteligência 1</span><span class="barra-grad">Presente</span></div><div class="barra-track"><div class="barra-fill" style="width:50%;background:rgba(79,195,247,.35)"></div></div></div><div class="barra"><div class="barra-row"><span class="barra-nome">Inteligência 2</span><span class="barra-grad">Presente</span></div><div class="barra-track"><div class="barra-fill" style="width:50%;background:rgba(79,195,247,.35)"></div></div></div><div class="barra"><div class="barra-row"><span class="barra-nome">Inteligência 3</span><span class="barra-grad">Presente</span></div><div class="barra-track"><div class="barra-fill" style="width:50%;background:rgba(79,195,247,.35)"></div></div></div><div class="barra" style="filter:blur(3px);pointer-events:none;user-select:none"><div class="barra-row"><span class="barra-nome">Inteligência 4</span><span class="barra-grad">Presente</span></div><div class="barra-track"><div class="barra-fill" style="width:50%;background:rgba(79,195,247,.35)"></div></div></div><div class="barra" style="filter:blur(3px);pointer-events:none;user-select:none"><div class="barra-row"><span class="barra-nome">Inteligência 5</span><span class="barra-grad">Presente</span></div><div class="barra-track"><div class="barra-fill" style="width:50%;background:rgba(79,195,247,.35)"></div></div></div><div style="text-align:center;margin:10px 0 4px;font-family:'Cinzel',serif;font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:rgba(79,195,247,.3)">+ 4 inteligências no Mapeamento Completo</div><div class="card" style="margin-top:16px"><div class="card-topo" style="background:linear-gradient(90deg,var(--azul),transparent)"></div><div class="card-tit" style="color:var(--azul)">Canal Sensorial Dominante</div><div class="card-txt">Você não processa objetos, processa estruturas. Diagramas mentais surgem antes das palavras. Quando você "vê" uma ideia, é literalmente uma arquitetura visual interna. Existe um canal secundário que aparece como expressão, não como entrada.</div></div></div>
+<div class="div">· · ·</div>
+<div class="secao fu"><div class="sec-header"><div class="sec-icon" style="background:rgba(121,134,203,.12);color:#7986cb">⚙</div><div><div class="sec-sub" style="color:#7986cb">Mapeamento Completo</div><div class="sec-titulo">Funções Executivas</div></div></div><div style="filter:blur(4px);pointer-events:none;user-select:none"><div class="rings-grid"><div class="ring-card"><svg class="ring-svg" viewBox="0 0 72 72"><circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="7"/><circle cx="36" cy="36" r="28" fill="none" stroke="#4fc3f7" stroke-width="7" stroke-dasharray="88 176" stroke-linecap="round" transform="rotate(-90 36 36)"/><text x="36" y="40" font-family="'Cinzel',serif" font-size="13" font-weight="700" fill="#e8dfc8" text-anchor="middle">50</text></svg><div class="ring-tit">Planejamento</div></div><div class="ring-card"><svg class="ring-svg" viewBox="0 0 72 72"><circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="7"/><circle cx="36" cy="36" r="28" fill="none" stroke="#81d4fa" stroke-width="7" stroke-dasharray="88 176" stroke-linecap="round" transform="rotate(-90 36 36)"/><text x="36" y="40" font-family="'Cinzel',serif" font-size="13" font-weight="700" fill="#e8dfc8" text-anchor="middle">50</text></svg><div class="ring-tit">Foco Profundo</div></div><div class="ring-card"><svg class="ring-svg" viewBox="0 0 72 72"><circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="7"/><circle cx="36" cy="36" r="28" fill="none" stroke="#9575cd" stroke-width="7" stroke-dasharray="88 176" stroke-linecap="round" transform="rotate(-90 36 36)"/><text x="36" y="40" font-family="'Cinzel',serif" font-size="13" font-weight="700" fill="#e8dfc8" text-anchor="middle">50</text></svg><div class="ring-tit">Flexibilidade</div></div><div class="ring-card"><svg class="ring-svg" viewBox="0 0 72 72"><circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="7"/><circle cx="36" cy="36" r="28" fill="none" stroke="#7986cb" stroke-width="7" stroke-dasharray="88 176" stroke-linecap="round" transform="rotate(-90 36 36)"/><text x="36" y="40" font-family="'Cinzel',serif" font-size="13" font-weight="700" fill="#e8dfc8" text-anchor="middle">50</text></svg><div class="ring-tit">Regularidade</div></div></div></div><div style="text-align:center;margin-top:12px;font-family:'Cinzel',serif;font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:rgba(79,195,247,.3)">Desbloqueado no Mapeamento Completo</div></div>
+<div class="div">· · ·</div>
+<div class="secao fu"><div class="sec-header"><div class="sec-icon" style="background:rgba(232,135,26,.12);color:var(--fogo)">🜄</div><div><div class="sec-sub" style="color:var(--fogo)">Dimensão 3</div><div class="sec-titulo">O que te move</div></div></div><div class="card"><div class="card-topo" style="background:linear-gradient(90deg,var(--fogo),transparent)"></div><div class="card-tit" style="color:var(--fogo)">Acende</div><div class="card-txt">Problemas de comunicação complexos que exigem tradução entre diferentes linguagens ou contextos</div></div><div class="card"><div class="card-topo" style="background:linear-gradient(90deg,var(--verm),transparent)"></div><div class="card-tit" style="color:var(--verm)">Apaga</div><div class="card-txt">Reuniões que poderiam ter sido emails e conversas que giram em círculos sem chegar a lugar nenhum</div></div><div class="card"><div class="card-topo" style="background:linear-gradient(90deg,var(--ouro),transparent)"></div><div class="card-tit" style="color:var(--ouro)">Condição de trabalho ideal</div><div class="card-txt">Autonomia para estruturar as conversas do seu jeito e tempo para processar antes de responder</div></div></div>
+<div class="div">✦ ◈ ✦</div>
+<div class="guilda-card fu d3"><span class="guilda-sym" style="filter:blur(2px) drop-shadow(0 0 16px rgba(79,195,247,.3))">◈</span><div class="guilda-subtag">Sua Arquitetura Cognitiva</div><div class="guilda-nome" style="filter:blur(5px);user-select:none">█████</div><div class="guilda-classe-tag" style="filter:blur(4px);user-select:none">Classe: █████</div><div class="guilda-linha"></div><div class="guilda-desc">Você processa o mundo como sistema. Identifica padrões antes que se tornem visíveis, constrói rotas antes que o terreno esteja mapeado. Não é intuição, é uma forma específica de ler estruturas que poucos têm acesso.<br><br>Existe um nome para esse padrão dentro do sistema. E ele revela muito mais do que essa descrição consegue capturar.</div></div>
+<div class="classe-card fu d4"><div class="classe-header"><div class="classe-icon">◎</div><div><div class="classe-tag">Sua Expressão Operacional</div><div class="classe-nome"><span style="filter:blur(5px);user-select:none">█████</span></div></div></div><div class="classe-linha"></div><div class="classe-txt">Dentro da sua arquitetura cognitiva, existe uma forma específica de operar. Você não apenas enxerga sistemas: você os constrói de modo que funcionem sem a sua presença constante. Cada projeto seu é uma infraestrutura, não apenas um produto.<br><br>Essa forma de agir tem um nome dentro do sistema. Ele descreve não só como você trabalha, mas <strong>por que o seu trabalho tem o peso que tem</strong>, e onde essa forma de operar cria tensão sem que você perceba.</div></div>
+<div class="div">· · ·</div>
+<div class="secao fu"><div class="sec-header"><div class="sec-icon" style="background:rgba(201,160,48,.12);color:var(--ouro)">⟁</div><div><div class="sec-sub" style="color:var(--ouro)">Dimensão 6</div><div class="sec-titulo">Narrativa Identitária</div></div></div><div class="card" style="border-color:rgba(201,160,48,.2)"><div class="card-topo" style="background:linear-gradient(90deg,var(--ouro),transparent)"></div><div class="narrativa">Você sempre foi a pessoa que conseguia explicar coisas. Não de forma didática ou professoral, mas de um jeito que fazia as pessoas entenderem de verdade, sentirem que finalmente alguém tinha organizado aquela bagunça de ideias na cabeça delas. Desde cedo você percebeu que tinha uma espécie de radar para mal-entendidos: conseguia sentir quando as palavras não estavam chegando onde deveriam chegar.<br><br>O que você ama de verdade é o momento em que a comunicação funciona. Aquele click quase audível quando duas pessoas que estavam falando línguas diferentes de repente se entendem, quando um conceito complexo finalmente encontra sua forma simples e elegante, quando uma conversa difícil se transforma em solução. É isso que te move: a arquitetura perfeita da compreensão mútua.</div><div class="narrativa-corte"><div class="narrativa-corte-txt">Mas existe algo que te paralisa: a sensação de que sua comunicação precisa ser perfeita antes de sair da sua boca, e essa busca pela precisão absoluta às vezes</div></div></div></div>
+<div class="div">✦ ◈ ✦</div>
+<div class="secao fu"><div class="sec-header"><div class="sec-icon" style="background:rgba(79,195,247,.10);color:var(--acento)">◈</div><div><div class="sec-sub" style="color:var(--acento)">O que falta</div><div class="sec-titulo">No Mapeamento Completo</div></div></div><div class="cego" style="opacity:.7"><div class="cego-nome">🔒 Sua Guilda e sua Classe, reveladas</div></div><div class="cego" style="opacity:.7"><div class="cego-nome">🔒 A outra metade da sua narrativa</div></div><div class="cego" style="opacity:.7"><div class="cego-nome">🔒 Via Modal: como você se relaciona e processa</div></div><div class="cego" style="opacity:.7"><div class="cego-nome">🔒 Energia elemental</div></div><div class="cego" style="opacity:.7"><div class="cego-nome">🔒 Perfil profissional e 5 carreiras alinhadas</div></div><div class="cego" style="opacity:.7"><div class="cego-nome">🔒 Pontos cegos e como ajustar</div></div><div class="cego" style="opacity:.7"><div class="cego-nome">🔒 Missão inicial e o caminho</div></div></div>
+<div class="fecho fu"><span class="fecho-sym">◈</span><div class="fecho-data">Mapeamento realizado · 30/5/2026</div><div class="fecho-txt">O que você leu é real.<br>É só o que é possível revelar agora.<br><br>O resto está lá, mapeado, esperando.</div><a href="https://www.mercadopago.com.br/checkout-teste-maestria" style="display:block;font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#0a0c14;background:#4fc3f7;border:none;padding:17px 24px;text-decoration:none;position:relative;max-width:300px;margin:0 auto;text-align:center;">Desbloquear Mapeamento Completo</a></div>
+<script>
+const ease = 'cubic-bezier(.16,1,.3,1)';
+const obs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if (!e.isIntersecting) return;
+    const barras = e.target.querySelectorAll('.barra-fill');
+    barras.forEach(function(b, i){
+      const alvo = b.style.width || '0%';
+      b.style.transition = 'none';
+      b.style.width = '0%';
+      setTimeout(function(){
+        b.style.transition = 'width 1s ' + ease;
+        b.style.width = alvo;
+      }, 80 + i * 120);
+    });
+    const rings = e.target.querySelectorAll('.ring-arc');
+    rings.forEach(function(arc, i){
+      const val = arc.getAttribute('data-val');
+      if (!val) return;
+      arc.style.transition = 'none';
+      arc.style.strokeDasharray = '0 176';
+      setTimeout(function(){
+        arc.style.transition = 'stroke-dasharray 1s ' + ease;
+        arc.style.strokeDasharray = val + ' 176';
+      }, 80 + i * 150);
+    });
+    obs.unobserve(e.target);
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.secao,.guilda-card,.classe-card,.teia-wrap').forEach(function(s){ obs.observe(s); });
+</script>
+</body>
+</html>
